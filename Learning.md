@@ -16,7 +16,7 @@ Termos:
 * O termo "invoke" refere-se a executar uma função específica em um serviço AWS, como uma função Lambda.
 * "receber um invoke do CLI" significa acionar uma função localmente usando o CLI da AWS.
 
-Passos:
+### Passos:
 * Usando o Chalice, escrever um aplicativo serverless em Python. 
 * invocar esse aplicativo usando o CLI da AWS, e a saída da função será exibida no terminal.
 
@@ -24,3 +24,9 @@ Passos:
 
 ---> definir as rotas e lógica do aplicativo: 
 * mapear as URLs que os usuários podem acessar e determinar o que o aplicativo fará quando receber uma solicitação em cada URL.
+
+
+
+##### Links:
+quickstart do calice (bem simples): https://aws.github.io/chalice/quickstart.html
+
