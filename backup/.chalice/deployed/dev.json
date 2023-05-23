@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "name": "default-role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::000000000000:role/backup-dev",
+      "role_name": "backup-dev"
+    },
+    {
+      "name": "first_function",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:backup-dev-first_function"
+    },
+    {
+      "name": "second_function",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:backup-dev-second_function"
+    }
+  ],
+  "schema_version": "2.0",
+  "backend": "api"
+}
