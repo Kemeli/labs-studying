@@ -31,4 +31,5 @@ Termos:
 * documentação do chalice: https://aws.github.io/chalice/main.html
 * quickstart do chalice (bem simples): https://aws.github.io/chalice/quickstart.html
 * deploy com terraform (caso interesse): https://aws.github.io/chalice/topics/tf.html?highlight=local
+* LOCALSTACK com chalice: https://docs.localstack.cloud/user-guide/integrations/chalice/
 
