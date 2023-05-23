@@ -28,5 +28,6 @@ Termos:
 
 
 ##### Links:
-quickstart do calice (bem simples): https://aws.github.io/chalice/quickstart.html
+documentação do chalice: https://aws.github.io/chalice/main.html
+quickstart do chalice (bem simples): https://aws.github.io/chalice/quickstart.html
 
