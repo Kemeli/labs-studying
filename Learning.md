@@ -1,4 +1,4 @@
-### Receber um invoke do CLI e retornar uma saída no terminal, usar o Chalice para escrever uma aplicação serverless.
+### Objetivo: Receber um invoke do CLI e retornar uma saída no terminal, usar o Chalice para escrever uma aplicação serverless.
 
 Termos:
 #### REST API:
