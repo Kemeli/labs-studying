@@ -11,6 +11,10 @@ Termos:
 *  framework da AWS para desenvolvimento de aplicativos serverless em Python. 
 *  simplifica a criação de APIs, serviços web e backends sem servidor usando serviços como AWS Lambda e API Gateway.
 
+#### S3 Buckets:
+* asemelham-se a pastas de arquivos, podem ser usados para guardar e acessar objectos.
+* S3: Amazon's Simple Storage Service
+
 
 #### INVOKE CLI:
 * O termo "invoke" refere-se a executar uma função específica em um serviço AWS, como uma função Lambda.
