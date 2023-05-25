@@ -98,10 +98,10 @@ def upload_to_s3(file_name):
                     headers={'Content-Type': 'text/plain'})
 
 
-@app.route('/download', methods=['GET'])
-def download_file():
+@app.route('/download/{filename}', methods=['GET'])
+def download_file(filename):
     bytes_buffer = io.BytesIO()
-    s3_client.download_fileobj(Bucket=BUCKET, Key='foto.png', Fileobj=bytes_buffer)
+    s3_client.download_fileobj(Bucket=BUCKET, Key=filename, Fileobj=bytes_buffer)
     byte_value = bytes_buffer.getvalue()
     return Response(body=byte_value, 
         headers = {
