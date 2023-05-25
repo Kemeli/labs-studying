@@ -7,6 +7,7 @@ import os
 import time
 import sys
 import requests
+import io
 
 
 AWS_REGION = 'us-east-1'
@@ -95,3 +96,15 @@ def upload_to_s3(file_name):
     return Response(body='upload successful: {}'.format(file_name),
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})
+
+
+@app.route('/download', methods=['GET'])
+def download_file():
+    bytes_buffer = io.BytesIO()
+    s3_client.download_fileobj(Bucket=BUCKET, Key='foto.png', Fileobj=bytes_buffer)
+    byte_value = bytes_buffer.getvalue()
+    return Response(body=byte_value, 
+        headers = {
+                'Content-Type': 'application/octet-stream',
+                'Content-Disposition': 'attachment; filename="foto.png"'
+            })
