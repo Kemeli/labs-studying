@@ -6,10 +6,18 @@ import json
 import os
 import time
 import sys
+import requests
+
 
 AWS_REGION = 'us-east-1'
 ENDPOINT_URL = 'http://host.docker.internal:4566'
 BUCKET = 'backup'
+
+GADGETS = [
+    'https://game.42sp.org.br/static/assets/achievements/libftm.png',
+    'https://game.42sp.org.br/static/assets/achievements/get_next_linem.png',
+    'https://game.42sp.org.br/static/assets/achievements/netpracticee.png'
+    ]
 
 s3_client = boto3.client('s3', region_name=AWS_REGION,
                          endpoint_url=ENDPOINT_URL)
@@ -39,6 +47,11 @@ def upload_file(file_name, bucket, object_name=None):
 
 app = Chalice(app_name='backup')
 
+
+@app.lambda_function()
+def create_bucket(event, context):
+    create_bucket_s3(BUCKET)
+
 @app.lambda_function()
 def delete_image(event, context):
     client = boto3.client('s3')
@@ -46,8 +59,11 @@ def delete_image(event, context):
     return 'Deleted Successfully!'
 
 @app.lambda_function()
-def create_bucket(event, context):
-    create_bucket_s3(BUCKET)
+def upload_image_by_request(event, context):
+    response = requests.get(GADGETS[0]).content
+    s3_client.put_object(Body=response, Bucket=BUCKET, Key='foto.png')
+    return f'Uploaded Successfully!'
+
 
 @app.lambda_function()
 def upload_image(event, context):
@@ -60,6 +76,13 @@ def upload_image(event, context):
         if os.path.isfile(full_path):
             upload_file(full_path, BUCKET)
     return 'Uploaded Successfully!'
+
+@app.lambda_function()
+def list_objects(event, context):
+    contents = []
+    for key in s3_client.list_objects(Bucket=BUCKET)['Contents']:
+        contents.append(key['Key'])
+    return {'Contens:': contents}
 
 @app.route('/upload/{file_name}', methods=['PUT'],
            content_types=['application/octet-stream'])
