@@ -4,15 +4,17 @@ import boto3
 from botocore.exceptions import ClientError
 import json
 import os
+import time
+import sys
 
 AWS_REGION = 'us-east-1'
 ENDPOINT_URL = 'http://host.docker.internal:4566'
-
+BUCKET = 'backup'
 
 s3_client = boto3.client('s3', region_name=AWS_REGION,
                          endpoint_url=ENDPOINT_URL)
 
-def create_bucket(bucket_name):
+def create_bucket_s3(bucket_name):
     try:
         response = s3_client.create_bucket(
             Bucket=bucket_name)
@@ -34,35 +36,39 @@ def upload_file(file_name, bucket, object_name=None):
     else:
         return response
 
+
 app = Chalice(app_name='backup')
 
+@app.lambda_function()
+def delete_image(event, context):
+    client = boto3.client('s3')
+    s3_client.delete_object(Bucket=BUCKET, Key=event['filename'])
+    return 'Deleted Successfully!'
 
 @app.lambda_function()
-def first_function(event, context):
-    create_bucket('backup')
-
+def create_bucket(event, context):
+    create_bucket_s3(BUCKET)
 
 @app.lambda_function()
-def second_function(event, context):
-   return upload_to_s3('test_up.txt')
-
+def upload_image(event, context):
+    directories = [
+        '.',
+        '/opt/python/lib/python%s.%s/site-packages' % sys.version_info[:2]
+    ]
+    for dirname in directories:
+        full_path = os.path.join(dirname, event['filename'])
+        if os.path.isfile(full_path):
+            upload_file(full_path, BUCKET)
+    return 'Uploaded Successfully!'
 
 @app.route('/upload/{file_name}', methods=['PUT'],
            content_types=['application/octet-stream'])
 def upload_to_s3(file_name):
-
-    # get raw body of PUT request
     body = app.current_request.raw_body
-    print("\n\nbody: ", body)
-
-    # write body to tmp file
     tmp_file_name = '/tmp/' + 'file_name'
     with open(tmp_file_name, 'wb') as tmp_file:
         tmp_file.write(body)
-
-    # upload tmp file to s3 bucket
-    s3_client.upload_file(tmp_file_name, 'backup', file_name)
-
+    s3_client.upload_file(tmp_file_name, BUCKET, file_name)
     return Response(body='upload successful: {}'.format(file_name),
                     status_code=200,
                     headers={'Content-Type': 'text/plain'})

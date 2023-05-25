@@ -1,0 +1,33 @@
+{
+  "resources": [
+    {
+      "name": "default-role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::000000000000:role/backup-prod",
+      "role_name": "backup-prod"
+    },
+    {
+      "name": "first_function",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:backup-prod-first_function"
+    },
+    {
+      "name": "second_function",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:backup-prod-second_function"
+    },
+    {
+      "name": "api_handler",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:us-east-1:000000000000:function:backup-prod"
+    },
+    {
+      "name": "rest_api",
+      "resource_type": "rest_api",
+      "rest_api_id": "hlichvzvvc",
+      "rest_api_url": "https://hlichvzvvc.execute-api.us-east-1.amazonaws.com/api/"
+    }
+  ],
+  "schema_version": "2.0",
+  "backend": "api"
+}
