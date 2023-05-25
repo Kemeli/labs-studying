@@ -83,9 +83,12 @@ def upload_image(event, context):
 @app.lambda_function()
 def list_objects(event, context):
     contents = []
-    for key in s3_client.list_objects(Bucket=BUCKET)['Contents']:
-        contents.append(key['Key'])
-    return {'Contens:': contents}
+    try:
+        for key in s3_client.list_objects(Bucket=BUCKET)['Contents']:
+            contents.append(key['Key'])
+        return {'Contens:': contents}
+    except:
+        return "Empty!"
 
 @app.route('/download/{filename}', methods=['GET'])
 def download_file(filename):
