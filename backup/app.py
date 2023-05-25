@@ -15,8 +15,9 @@ ENDPOINT_URL = 'http://host.docker.internal:4566'
 BUCKET = 'backup'
 
 GADGETS = [
-    'https://game.42sp.org.br/static/assets/achievements/libftm.png',
     'https://game.42sp.org.br/static/assets/achievements/get_next_linem.png',
+    'https://game.42sp.org.br/static/assets/achievements/ft_printfe.png',
+    'https://game.42sp.org.br/static/assets/achievements/born2berootm.png',
     'https://game.42sp.org.br/static/assets/achievements/netpracticee.png'
     ]
 
@@ -61,8 +62,9 @@ def delete_image(event, context):
 
 @app.lambda_function()
 def upload_image_by_request(event, context):
-    response = requests.get(GADGETS[0]).content
-    s3_client.put_object(Body=response, Bucket=BUCKET, Key='foto.png')
+    for gadget in GADGETS:
+        response = requests.get(gadget).content
+        s3_client.put_object(Body=response, Bucket=BUCKET, Key=os.path.basename(gadget))
     return f'Uploaded Successfully!'
 
 
@@ -85,19 +87,6 @@ def list_objects(event, context):
         contents.append(key['Key'])
     return {'Contens:': contents}
 
-@app.route('/upload/{file_name}', methods=['PUT'],
-           content_types=['application/octet-stream'])
-def upload_to_s3(file_name):
-    body = app.current_request.raw_body
-    tmp_file_name = '/tmp/' + 'file_name'
-    with open(tmp_file_name, 'wb') as tmp_file:
-        tmp_file.write(body)
-    s3_client.upload_file(tmp_file_name, BUCKET, file_name)
-    return Response(body='upload successful: {}'.format(file_name),
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
-
-
 @app.route('/download/{filename}', methods=['GET'])
 def download_file(filename):
     bytes_buffer = io.BytesIO()
@@ -106,5 +95,5 @@ def download_file(filename):
     return Response(body=byte_value, 
         headers = {
                 'Content-Type': 'application/octet-stream',
-                'Content-Disposition': 'attachment; filename="foto.png"'
+                'Content-Disposition': f'attachment; filename="{filename}"'
             })
