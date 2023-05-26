@@ -14,7 +14,7 @@ AWS_REGION = 'us-east-1'
 ENDPOINT_URL = 'http://host.docker.internal:4566'
 BUCKET = 'backup'
 
-GADGETS = [
+BADGES = [
     'https://game.42sp.org.br/static/assets/achievements/get_next_linem.png',
     'https://game.42sp.org.br/static/assets/achievements/ft_printfe.png',
     'https://game.42sp.org.br/static/assets/achievements/born2berootm.png',
@@ -62,9 +62,9 @@ def delete_image(event, context):
 
 @app.lambda_function()
 def upload_image_by_request(event, context):
-    for gadget in GADGETS:
-        response = requests.get(gadget).content
-        s3_client.put_object(Body=response, Bucket=BUCKET, Key=os.path.basename(gadget))
+    for badge in BADGES:
+        response = requests.get(badge).content
+        s3_client.put_object(Body=response, Bucket=BUCKET, Key=os.path.basename(badge))
     return f'Uploaded Successfully!'
 
 
